@@ -12,17 +12,17 @@ import 'package:hello_word/screen/my_course.dart';
 import 'package:hello_word/screen/addrecipe.dart';
 import 'package:hello_word/screen/quiz.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:hello_word/screen/highscore.dart';
 
 import 'screen/basket.dart';
 
 String active_user = "";
 
 Future<String> checkUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    String user_id = prefs.getString("user_id") ?? '';
-    return user_id;
-  }
+  final prefs = await SharedPreferences.getInstance();
+  String user_id = prefs.getString("user_id") ?? '';
+  return user_id;
+}
 
 void doLogout() async {
   final prefs = await SharedPreferences.getInstance();
@@ -30,9 +30,8 @@ void doLogout() async {
   main();
 }
 
-
 void main() {
-WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   checkUser().then((String result) {
     if (result == '')
       runApp(MyLogin());
@@ -57,6 +56,7 @@ class MyApp extends StatelessWidget {
         'my_course': (context) => MyCourse(),
         'addrecipe': (context) => AddRecipe(),
         'quiz': (context) => Quiz(),
+        'highscore': (context) => HighScore(),
         'basket': (context) => Basket(),
       },
       theme: ThemeData(
@@ -80,7 +80,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String _user_id = "";
 
-@override
+  @override
   void initState() {
     super.initState();
     checkUser().then((value) => setState(
@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ));
   }
-  
+
   int _counter = 0;
   int _currentIndex = 0;
   final List<Widget> _screens = [Home(), Search(), History()];
@@ -205,6 +205,12 @@ class _MyHomePageState extends State<MyHomePage> {
               leading: Icon(Icons.quiz),
               onTap: () {
                 Navigator.pushNamed(context, "quiz");
+              }),
+          ListTile(
+              title: Text("High Score"),
+              leading: Icon(Icons.quiz),
+              onTap: () {
+                Navigator.pushNamed(context, "highscore");
               }),
           ListTile(
             title: new Text("About"),

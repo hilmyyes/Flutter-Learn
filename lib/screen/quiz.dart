@@ -5,6 +5,9 @@ import 'package:hello_word/class/question.dart';
 
 import 'dart:async';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hello_word/main.dart';
+
 
 class Quiz extends StatefulWidget {
   const Quiz({Key? key}) : super(key: key);
@@ -190,11 +193,19 @@ class _QuizState extends State<Quiz> {
               content: Text('Your point = $_point \n' + message ),
               actions: <Widget>[
                 TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, 'OK');
-                    Navigator.pop(context);
-                  },
-                  child: const Text('OK'),
+              onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              final _topPoint = prefs.getInt('top_point') ?? 0;
+
+              if (_point > _topPoint) {
+                prefs.setInt('top_point', _point);
+                prefs.setString('top_user', active_user);
+              }
+
+              Navigator.pop(context, 'OK');
+              Navigator.pop(context);
+            },
+            child: Text('OK'),
                 ),
               ],
             ));

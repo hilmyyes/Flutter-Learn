@@ -5,16 +5,42 @@ import 'package:hello_word/screen/about.dart';
 import 'package:hello_word/screen/history.dart';
 import 'package:hello_word/screen/home.dart';
 import 'package:hello_word/screen/itembasket.dart';
+import 'package:hello_word/screen/login.dart';
 import 'package:hello_word/screen/search.dart';
 import 'package:hello_word/screen/studentlist.dart';
 import 'package:hello_word/screen/my_course.dart';
 import 'package:hello_word/screen/addrecipe.dart';
 import 'package:hello_word/screen/quiz.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 import 'screen/basket.dart';
 
+String active_user = "";
+
+Future<String> checkUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    String user_id = prefs.getString("user_id") ?? '';
+    return user_id;
+  }
+
+void doLogout() async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.remove("user_id");
+  main();
+}
+
+
 void main() {
-  runApp(const MyApp());
+WidgetsFlutterBinding.ensureInitialized();
+  checkUser().then((String result) {
+    if (result == '')
+      runApp(MyLogin());
+    else {
+      active_user = result;
+      runApp(MyApp());
+    }
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -52,6 +78,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String _user_id = "";
+
+@override
+  void initState() {
+    super.initState();
+    checkUser().then((value) => setState(
+          () {
+            _user_id = value;
+          },
+        ));
+  }
+  
   int _counter = 0;
   int _currentIndex = 0;
   final List<Widget> _screens = [Home(), Search(), History()];
@@ -142,7 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: <Widget>[
           UserAccountsDrawerHeader(
               accountName: Text("xyz"),
-              accountEmail: Text("xyz@gmail.com"),
+              accountEmail: Text(_user_id),
               currentAccountPicture: CircleAvatar(
                   backgroundImage: NetworkImage("https://i.pravatar.cc/150"))),
           ListTile(
@@ -188,7 +226,13 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: () {
               Navigator.pushNamed(context, "my_course");
             },
-          )
+          ),
+          ListTile(
+              title: Text("Logout"),
+              leading: Icon(Icons.logout),
+              onTap: () {
+                doLogout();
+              })
         ],
       ),
     );

@@ -1,6 +1,7 @@
 # hello_word
 
-A new Flutter project.
+A new Flutter project. Project untuk Pembelajaran Emerging Technology.
+Untuk Branches Master == Hasil Latihan sampai Week 5
 
 ## Getting Started
 

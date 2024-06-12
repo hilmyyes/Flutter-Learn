@@ -13,8 +13,9 @@ import 'package:hello_word/screen/addrecipe.dart';
 import 'package:hello_word/screen/quiz.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hello_word/screen/highscore.dart';
-
+import 'package:hello_word/screen/popularmovie.dart';
 import 'screen/basket.dart';
+import 'package:hello_word/screen/popularactor.dart';
 
 String active_user = "";
 
@@ -58,6 +59,9 @@ class MyApp extends StatelessWidget {
         'quiz': (context) => Quiz(),
         'highscore': (context) => HighScore(),
         'basket': (context) => Basket(),
+        'popularmovies': (context) => PopularMovie(),
+        'popularactors': (context) => PopularActor(),
+
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -176,7 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Drawer myDrawer() {
     return Drawer(
       elevation: 16.0,
-      child: Column(
+      child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
               accountName: Text("xyz"),
@@ -233,6 +237,18 @@ class _MyHomePageState extends State<MyHomePage> {
               Navigator.pushNamed(context, "my_course");
             },
           ),
+           ListTile(
+              title: Text("Popular Movies"),
+              leading: Icon(Icons.movie),
+              onTap: () {
+                Navigator.pushNamed(context, "popularmovies");
+              }),
+             ListTile(
+              title: Text("Popular Actors"),
+              leading: Icon(Icons.person),
+              onTap: () {
+                Navigator.pushNamed(context, "popularactors");
+              }),
           ListTile(
               title: Text("Logout"),
               leading: Icon(Icons.logout),
